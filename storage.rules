@@ -1,0 +1,14 @@
+rules_version = '2';
+
+// Règles pour Firebase Storage
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{eventId}/{imageId} {
+      // Les invités connectés anonymement peuvent lire et uploader des images
+      allow read, create, delete: if request.auth != null;
+      
+      // Sécurité supplémentaire optionnelle : n'autoriser que les petites images webp
+      // allow create: if request.auth != null && request.resource.contentType.matches('image/.*') && request.resource.size < 5 * 1024 * 1024;
+    }
+  }
+}

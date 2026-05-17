@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Règles pour les photographies de l'événement
+    match /photos/{document} {
+      // Autorise tout invité connecté (même anonymement) à voir, publier et (en tant qu'admin) supprimer
+      allow read, create, delete: if request.auth != null;
+      allow update: if false; 
+    }
+  }
+}
