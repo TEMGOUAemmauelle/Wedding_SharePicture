@@ -34,8 +34,8 @@ export default function Upload({ eventId }) {
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, width, height);
 
-          // Qualité 0.7 pour optimiser au maximum le poids de la chaîne Base64
-          const dataUrl = canvas.toDataURL("image/webp", 0.7);
+          // Qualité 0.8 pour optimiser au maximum le poids de la chaîne Base64 en JPEG
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
           
           // Un doc Firestore fait max 1 048 576 bytes. 
           // On avertit si l'image encodée est malgré tout trop grosse.

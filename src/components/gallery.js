@@ -80,7 +80,7 @@ export default function Gallery({ eventId }) {
       for (const photo of photosToDownload) {
         const base64Data = photo.url.split(',')[1];
         if (base64Data) {
-          zip.file(`Souvenir_${count}.webp`, base64Data, { base64: true });
+          zip.file(`Souvenir_${count}.jpg`, base64Data, { base64: true });
           count++;
         }
       }
@@ -104,7 +104,7 @@ export default function Gallery({ eventId }) {
       for (const photo of photos) {
         const base64Data = photo.url.split(',')[1];
         if (base64Data) {
-          zip.file(`Souvenir_${count}.webp`, base64Data, { base64: true });
+          zip.file(`Souvenir_${count}.jpg`, base64Data, { base64: true });
           count++;
         }
       }
