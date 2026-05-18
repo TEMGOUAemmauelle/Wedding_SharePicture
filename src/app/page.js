@@ -8,13 +8,13 @@ export default function Home() {
         
         <div className="relative inline-block">
           <h1 className="text-6xl sm:text-7xl font-space font-bold tracking-tighter text-gold relative z-10 text-center">
-            Weddind.
+            Wedding.
           </h1>
         </div>
 
         <div>
            <p className="text-lg sm:text-xl text-gray-300 font-outfit font-light leading-relaxed">
-            L'éclat d'un instant,<br className="hidden sm:block" /> gravé pour l'éternité.
+            L'éclat d'un instant,<br className="hidden sm:block" /> où l'amour de Madelle et Hugues se grave pour l'éternité.
           </p>
         </div>
 
