@@ -5,8 +5,11 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
 
 export const metadata = {
-  title: "L'Événement",
-  description: "Partagez vos photographies.",
+  title: "Madelle & Hugues",
+  description: "L'éclat d'un instant, gravé pour l'éternité.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='40' cy='50' r='25' fill='none' stroke='%23D4AF37' stroke-width='8'/><circle cx='60' cy='50' r='25' fill='none' stroke='%23D4AF37' stroke-width='8'/></svg>",
+  },
 };
 
 export default function RootLayout({ children }) {
