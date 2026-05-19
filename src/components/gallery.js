@@ -194,10 +194,8 @@ export default function Gallery({ eventId }) {
         </div>
       )}
 
-      {/* ╔══════════════════════════════════╗
-          ║  BARRE SÉLECTION FLOTTANTE (bas)  ║
-          ╚══════════════════════════════════╝ */}
-      {selectionMode && (
+      {/* barre flottante supprimée — contrôles déplacés dans l'en-tête */}
+      {false && (
         <div
           style={{
             position:"fixed",
@@ -267,24 +265,79 @@ export default function Gallery({ eventId }) {
       )}
 
       {/* ── En-tête galerie ── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-6 border-b border-white/10 gap-4">
+      <div className="flex justify-between items-center mb-6 pb-5 border-b border-white/10">
         <div>
-          <h2 className="text-3xl font-space font-bold text-white uppercase tracking-widest">Galerie</h2>
-          <span className="text-sm text-gray-400 mt-1 uppercase tracking-widest block">{photos.length} photo{photos.length>1?"s":""}</span>
+          <h2 className="text-2xl sm:text-3xl font-space font-bold text-white uppercase tracking-widest leading-none">Galerie</h2>
+          <span className="text-xs text-gray-500 mt-1 uppercase tracking-widest block">
+            {selectionMode ? `${selectedPhotos.size} sélectionnée${selectedPhotos.size>1?"s":""}` : `${photos.length} photo${photos.length>1?"s":""}`}
+          </span>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {photos.length > 0 && !selectionMode && (
-            <button onClick={dlAll} disabled={isDownloading}
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/10 text-xs font-bold py-2.5 px-4 rounded-full transition-all uppercase tracking-widest disabled:opacity-50">
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
-              </svg>
-              {isDownloading ? "Zip..." : "Tout (ZIP)"}
-            </button>
+
+        {/* ── Boutons icônes compacts ── */}
+        <div className="flex items-center gap-2">
+
+          {/* Mode sélection actif : Télécharger + Annuler */}
+          {selectionMode ? (
+            <>
+              {/* Télécharger la sélection */}
+              <button
+                onClick={dlSelection}
+                disabled={isDownloading || selectedPhotos.size === 0}
+                title={`Télécharger ${selectedPhotos.size} photo${selectedPhotos.size>1?"s":""} (ZIP)`}
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all border ${
+                  selectedPhotos.size > 0
+                    ? "bg-white border-white text-black hover:bg-gray-200 shadow-lg"
+                    : "bg-white/10 border-white/10 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                {isDownloading
+                  ? <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  : <svg fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                }
+              </button>
+
+              {/* Annuler sélection */}
+              <button
+                onClick={()=>{ setSelectionMode(false); setSelectedPhotos(new Set()); }}
+                title="Annuler la sélection"
+                className="w-9 h-9 rounded-full flex items-center justify-center border border-white/20 text-gray-400 hover:text-white hover:border-white/40 transition-all"
+              >
+                <svg fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </>
+          ) : (
+            /* Mode normal : Tout télécharger */
+            photos.length > 0 && (
+              <button
+                onClick={dlAll}
+                disabled={isDownloading}
+                title="Tout télécharger (ZIP)"
+                className="w-9 h-9 rounded-full flex items-center justify-center border border-white/15 text-gray-400 hover:text-white hover:border-white/30 transition-all disabled:opacity-40"
+              >
+                {isDownloading
+                  ? <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                  : <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                }
+              </button>
+            )
           )}
-          <button onClick={toggleMod}
-            className={`text-xs font-bold px-3 py-2.5 border rounded-full uppercase tracking-widest transition-colors ${isModerator?"bg-red-500/20 text-red-500 border-red-500/30":"text-gray-600 border-transparent hover:text-white"}`}>
-            {isModerator ? "✕ Modération" : "Admin"}
+
+          {/* Admin (icône clé) */}
+          <button
+            onClick={toggleMod}
+            title={isModerator ? "Fermer la modération" : "Accès modérateur"}
+            className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all ${
+              isModerator
+                ? "bg-red-500/20 border-red-500/40 text-red-400"
+                : "border-transparent text-gray-700 hover:text-gray-400 hover:border-white/10"
+            }`}
+          >
+            {isModerator
+              ? <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+              : <svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
+            }
           </button>
         </div>
       </div>
