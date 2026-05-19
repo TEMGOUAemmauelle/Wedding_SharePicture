@@ -1,6 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleAdminAccess = () => {
+    const code = prompt("Code d'accès administrateur :");
+    if (code === "maries2026") {
+      router.push("/admin/create-event");
+    } else if (code !== null) {
+      alert("❌ Accès refusé. Code incorrect.");
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-6 overflow-hidden">
 
@@ -20,7 +34,7 @@ export default function Home() {
           </h1>
         </div>
 
-        {/* Alliances juste en dessous du titre — espace réduit */}
+        {/* Alliances */}
         <div className="flex justify-center mt-4 mb-4 animate-fade-up" style={{animationDelay:'0.2s'}}>
           <div className="relative w-10 h-10 sm:w-12 sm:h-12">
             <svg viewBox="0 0 100 100" className="w-full h-full animate-spin-slow opacity-60">
@@ -65,12 +79,13 @@ export default function Home() {
             </span>
           </Link>
           
-          <Link
-            href="/admin/create-event"
-            className="block py-4 px-6 w-full rounded-full bg-transparent border border-white/15 text-gray-400 font-medium text-base hover:bg-white/5 hover:text-white hover:border-white/30 transition-all duration-300 active:scale-[0.98]"
+          {/* Bouton Admin protégé par mot de passe */}
+          <button
+            onClick={handleAdminAccess}
+            className="block w-full py-4 px-6 rounded-full bg-transparent border border-white/10 text-gray-600 font-medium text-sm hover:border-white/20 hover:text-gray-400 transition-all duration-300 active:scale-[0.98] uppercase tracking-widest"
           >
-            Accès Privilège (Admin)
-          </Link>
+            🔒 Zone Privée
+          </button>
         </div>
 
         {/* Date */}

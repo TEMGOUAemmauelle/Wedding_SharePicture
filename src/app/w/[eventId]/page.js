@@ -51,8 +51,9 @@ export default async function EventPage({ params }) {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8 text-center">
+      <footer className="border-t border-white/5 py-8 text-center space-y-1">
         <p className="text-[10px] uppercase tracking-[0.4em] text-gray-700 font-outfit">Héritage Visuel · 2026</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] text-gray-800 font-outfit">by Gates Tems</p>
       </footer>
     </main>
   );
