@@ -1,49 +1,92 @@
 @import "tailwindcss";
 
 @layer utilities {
-  .font-space {
-    font-family: var(--font-space);
-  }
-  .font-outfit {
-    font-family: var(--font-outfit);
-  }
-  
-  .animate-fade-up {
-    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-  }
-  
-  /* Modern floating Navbar strictly monochrome border but flexible content */
+  .font-space { font-family: var(--font-space); }
+  .font-outfit { font-family: var(--font-outfit); }
+
+  /* ── Glassmorphism ── */
   .glass-nav {
-    background: rgba(15, 15, 15, 0.8);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    background: rgba(10, 10, 10, 0.75);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
-
-  /* Modern Card */
   .glass-panel {
-    background: linear-gradient(145deg, rgba(25,25,25,0.8) 0%, rgba(5,5,5,0.9) 100%);
+    background: linear-gradient(145deg, rgba(22,22,22,0.75) 0%, rgba(5,5,5,0.9) 100%);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
+  /* ── Gold ── */
   .text-gold {
-    background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+    background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 40%, #B38728 70%, #FBF5B7 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
+  /* ── Entrance animations ── */
+  .animate-fade-up   { animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-fade-in   { animation: fadeIn 0.7s ease-out forwards; }
+  .animate-slide-down{ animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+  /* ── Ambient loops ── */
+  .animate-float     { animation: float 6s ease-in-out infinite; }
+  .animate-shimmer   { animation: shimmer 2.5s linear infinite; }
+  .animate-pulse-slow{ animation: pulseSlow 4s ease-in-out infinite; }
+  .animate-spin-slow { animation: spin 12s linear infinite; }
+
+  /* ── Shimmer skeleton ── */
+  .shimmer-bg {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+  }
 }
 
+/* ════════════ KEYFRAMES ════════════ */
 @keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(30px) scale(0.98); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0%   { opacity: 0; transform: translateY(40px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0)   scale(1); }
+}
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes slideDown {
+  0%   { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(1deg); }
+  66%       { transform: translateY(-6px) rotate(-1deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.05); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+/* ── Gradient text animation ── */
+.text-gold-animated {
+  background: linear-gradient(270deg, #BF953F, #FCF6BA, #D4AF37, #FBF5B7, #AA771C);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 5s ease infinite;
 }
