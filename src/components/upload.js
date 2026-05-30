@@ -17,23 +17,44 @@ export default function Upload({ eventId }) {
         const img = new Image();
         img.onload = () => {
           let { width, height } = img;
-          const maxDim = 1200;
-          if (width > height && width > maxDim) { height *= maxDim / width; width = maxDim; }
-          else if (height > maxDim) { width *= maxDim / height; height = maxDim; }
-          
+
+          // Augmentation de la résolution max : 1920px (Full HD)
+          const maxDim = 1920;
+          if (width > height && width > maxDim) { height = Math.round(height * maxDim / width); width = maxDim; }
+          else if (height > maxDim)            { width  = Math.round(width  * maxDim / height); height = maxDim; }
+
           const canvas = document.createElement("canvas");
-          canvas.width = width; canvas.height = height;
-          canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
-          
-          if (dataUrl.length > 1000000) {
-            alert(`L'image "${file.name}" est trop lourde même après compression. Réessayez avec une image moins détaillée.`);
+          canvas.width = width;
+          canvas.height = height;
+
+          // imageSmoothingQuality = 'high' pour un meilleur rendu lors du redimensionnement
+          const ctx = canvas.getContext("2d");
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compression adaptive : on essaie la meilleure qualité, on réduit si trop lourd
+          const qualities = [0.92, 0.85, 0.78, 0.70, 0.60];
+          let dataUrl = null;
+
+          for (const q of qualities) {
+            dataUrl = canvas.toDataURL("image/jpeg", q);
+            // Limite Firestore : 1 Mo par document (la base64 représente ~75% de la taille réelle)
+            if (dataUrl.length <= 950000) break;
+          }
+
+          if (!dataUrl || dataUrl.length > 950000) {
+            alert(`L'image "${file.name}" est trop lourde même après compression maximale. Essayez une image plus petite.`);
             resolve(null);
-          } else resolve(dataUrl);
+          } else {
+            resolve(dataUrl);
+          }
         };
-        img.onerror = reject; img.src = e.target.result;
+        img.onerror = reject;
+        img.src = e.target.result;
       };
-      reader.onerror = reject; reader.readAsDataURL(file);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
   };
 
